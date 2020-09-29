@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../store'
-import { Link } from 'react-router-dom'
+import { withRouter, Link, RouteComponentProps } from 'react-router-dom'
 
 const NavMenuWrapper = styled.div`
   height: 62px;
@@ -18,17 +18,24 @@ const NavMenuLink = styled(Link)`
   color: #000;
 `
 
-const NavMenu = () => {
+const NavMenu: React.FC<RouteComponentProps<any>> = ({ history }) => {
+  const [searchInputValue, setSearchInputValue] = useState('')
   const menuLinks = useSelector((state: AppStateType) => state.patternsTags)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setSearchInputValue(value)
+    value ? history.push(`/${value}/searching`) : history.push(`/`)
+  }
 
   return (
     <NavMenuWrapper>
       {menuLinks.length ?
         menuLinks.map((link: string, i: number) => <NavMenuLink to={`/${link}`} key={i}>{link}</NavMenuLink>) :
         <div>loading</div>}
-      <input type="text"/>
+      <input type="text" placeholder="Поиск по названию" value={searchInputValue} onChange={handleChange}/>
     </NavMenuWrapper>
   )
 }
 
-export default NavMenu
+export default withRouter(NavMenu)

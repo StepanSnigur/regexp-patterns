@@ -17,7 +17,7 @@ export interface IPattern {
   tags: string[]
 }
 
-const loadPatterns = (term?: string) => async (
+const loadPatterns = (term?: string, isSearching?: boolean) => async (
   dispatch: Dispatch<loadPatternsActionType | setErrorActionType | setLoadingActionType>
 ) => {
   try {
@@ -27,8 +27,13 @@ const loadPatterns = (term?: string) => async (
     patternsCollection.forEach(doc => {
       const pattern = doc.data() as IPattern
       pattern.id = doc.id
+
+      if (isSearching) {
+        pattern.name.toLowerCase().includes(term!.toLowerCase()) && patterns.push(pattern)
+      } else {
+        pattern.tags.includes(term!) && patterns.push(pattern)
+      }
       if (!term) patterns.push(pattern)
-      else if (pattern.tags.includes(term)) patterns.push(pattern)
     })
     dispatch(loadPatternsCreator(patterns))
   } catch (e) {

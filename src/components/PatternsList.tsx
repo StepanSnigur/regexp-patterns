@@ -12,16 +12,17 @@ const PatternsListWrapper = styled.div`
 `
 
 interface IPatternsList {
-  term?: string
+  term?: string,
+  isSearching?: boolean
 }
-const PatternsList: React.FC<IPatternsList> = ({ term }) => {
+const PatternsList: React.FC<IPatternsList> = ({ term, isSearching }) => {
   const dispatch = useDispatch()
   const patterns = useSelector((state: AppStateType) => state.patterns)
   const isLoading = useSelector((state: AppStateType) => state.isLoading)
 
   useEffect(() => {
-    dispatch(loadPatterns(term))
-  }, [term, dispatch])
+    dispatch(loadPatterns(term, isSearching))
+  }, [term, isSearching, dispatch])
 
   return (
     <PatternsListWrapper>

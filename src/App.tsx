@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import './App.css'
 
 import setPatternsTags from './actions/setPatternsTags'
-import loadPatterns from './actions/loadPatterns'
 import NavMenu from './components/NavMenu'
 import PatternsList from './components/PatternsList'
 
@@ -29,12 +28,12 @@ const App = () => {
     <MainWrapper>
       <NavMenu />
       <Switch>
-        <Route path="/" exact component={PatternsList} />
+        <Route path="/" exact component={() => <PatternsList term={''} />} />
         <Route
-          path="/:tabName"
+          path="/:tabName/:isSearching?"
           render={({ match }) => {
-            const { tabName } = match.params
-            return <PatternsList term={tabName} />
+            const { tabName, isSearching } = match.params
+            return <PatternsList term={tabName} isSearching={!!isSearching} />
           }}
         />
       </Switch>
