@@ -31,6 +31,7 @@ const PatternBlockWrapper = styled.div`
     border-radius: 20px;
     text-align: center;
     border: 0.5px solid #eee;
+    outline: none;
   }
 `
 

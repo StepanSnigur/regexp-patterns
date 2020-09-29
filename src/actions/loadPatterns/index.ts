@@ -7,6 +7,9 @@ import loadPatternsActionType from './actionType'
 import setErrorCreator from '../setError/actionCreator'
 import setErrorActionType from '../setError/actionType'
 
+import setLoading from '../setLoading'
+import setLoadingActionType from '../setLoading/actionType'
+
 export interface IPattern {
   pattern: string,
   name: string,
@@ -14,14 +17,18 @@ export interface IPattern {
   tags: string[]
 }
 
-const loadPatterns = (term?: string) => async (dispatch: Dispatch<loadPatternsActionType | setErrorActionType>) => {
+const loadPatterns = (term?: string) => async (
+  dispatch: Dispatch<loadPatternsActionType | setErrorActionType | setLoadingActionType>
+) => {
   try {
+    dispatch(setLoading())
     const patternsCollection = await db.collection('patterns').get()
     let patterns: IPattern[] = []
     patternsCollection.forEach(doc => {
       const pattern = doc.data() as IPattern
       pattern.id = doc.id
-      patterns.push(pattern)
+      if (!term) patterns.push(pattern)
+      else if (pattern.tags.includes(term)) patterns.push(pattern)
     })
     dispatch(loadPatternsCreator(patterns))
   } catch (e) {

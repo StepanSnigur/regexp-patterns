@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Switch, Route } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import './App.css'
@@ -17,25 +18,26 @@ const MainWrapper = styled.div`
 const App = () => {
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   db.collection('patterns').get().then(data => {
-  //     data.forEach(doc => {
-  //       console.log(doc.data())
-  //     })
-  //   })
-  // }, [])
   useEffect(() => {
     document.body.style.background = '#f3f3f7'
   }, [])
   useEffect(() => {
     dispatch(setPatternsTags())
-    dispatch(loadPatterns())
   }, [dispatch])
 
   return (
     <MainWrapper>
       <NavMenu />
-      <PatternsList />
+      <Switch>
+        <Route path="/" exact component={PatternsList} />
+        <Route
+          path="/:tabName"
+          render={({ match }) => {
+            const { tabName } = match.params
+            return <PatternsList term={tabName} />
+          }}
+        />
+      </Switch>
     </MainWrapper>
   )
 }

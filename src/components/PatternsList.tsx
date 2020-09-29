@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppStateType } from '../store'
-import { IPattern } from '../actions/loadPatterns'
+import loadPatterns, { IPattern } from '../actions/loadPatterns'
 import PatternBlock from './PatternBlock'
 
 const PatternsListWrapper = styled.div`
@@ -11,12 +11,21 @@ const PatternsListWrapper = styled.div`
   margin-top: 35px;
 `
 
-const PatternsList = () => {
+interface IPatternsList {
+  term?: string
+}
+const PatternsList: React.FC<IPatternsList> = ({ term }) => {
+  const dispatch = useDispatch()
   const patterns = useSelector((state: AppStateType) => state.patterns)
+  const isLoading = useSelector((state: AppStateType) => state.isLoading)
+
+  useEffect(() => {
+    dispatch(loadPatterns(term))
+  }, [term, dispatch])
 
   return (
     <PatternsListWrapper>
-      {patterns.map((pattern: IPattern) => <PatternBlock
+      {isLoading ? <div>loading</div> : patterns.map((pattern: IPattern) => <PatternBlock
         key={pattern.id}
         name={pattern.name}
         regExp={pattern.pattern}
