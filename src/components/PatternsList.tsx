@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppStateType } from '../store'
 import loadPatterns, { IPattern } from '../actions/loadPatterns'
+
+import LoadingBoundary from './LoadingBoundary'
 import PatternBlock from './PatternBlock'
 
 const PatternsListWrapper = styled.div`
@@ -26,11 +28,15 @@ const PatternsList: React.FC<IPatternsList> = ({ term, isSearching }) => {
 
   return (
     <PatternsListWrapper>
-      {isLoading ? <div>loading</div> : patterns.map((pattern: IPattern) => <PatternBlock
-        key={pattern.id}
-        name={pattern.name}
-        regExp={pattern.pattern}
-      />)}
+      <LoadingBoundary isLoading={isLoading}>
+        {patterns.length
+          ? patterns.map((pattern: IPattern) => <PatternBlock
+            key={pattern.id}
+            name={pattern.name}
+            regExp={pattern.pattern}
+          />)
+          : <div>Не найдено</div>}
+      </LoadingBoundary>
     </PatternsListWrapper>
   )
 }

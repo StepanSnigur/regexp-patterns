@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../store'
 import { withRouter, Link, RouteComponentProps } from 'react-router-dom'
+import LoadingBoundary from './LoadingBoundary'
 
 const NavMenuWrapper = styled.div`
   height: 62px;
@@ -37,10 +38,15 @@ const NavMenu: React.FC<RouteComponentProps<any>> = ({ history }) => {
 
   return (
     <NavMenuWrapper>
-      {menuLinks.length ?
-        menuLinks.map((link: string, i: number) => <NavMenuLink to={`/${link}`} key={i}>{link}</NavMenuLink>) :
-        <div>loading</div>}
-      <NavMenuInput type="text" placeholder="Поиск по названию" value={searchInputValue} onChange={handleChange}/>
+      <LoadingBoundary isLoading={!menuLinks.length}>
+        {menuLinks.map((link: string, i: number) => <NavMenuLink to={`/${link}`} key={i}>{link}</NavMenuLink>)}
+      </LoadingBoundary>
+      <NavMenuInput
+        type="text"
+        placeholder="Поиск по названию"
+        value={searchInputValue}
+        onChange={handleChange}
+      />
     </NavMenuWrapper>
   )
 }
