@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import './App.css'
 
+import Logo from './components/Logo'
 import setPatternsTags from './actions/setPatternsTags'
 import NavMenu from './components/NavMenu'
 import PatternsList from './components/PatternsList'
@@ -11,7 +12,7 @@ import PatternsList from './components/PatternsList'
 const MainWrapper = styled.div`
   max-width: 1100px;
   margin: 0 auto;
-  padding: 50px 0
+  padding: 30px 0;
 `
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <MainWrapper>
+      <Logo />
       <NavMenu />
       <Switch>
         <Route path="/" exact component={() => <PatternsList term={''} />} />
