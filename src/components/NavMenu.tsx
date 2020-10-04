@@ -17,6 +17,13 @@ const NavMenuLink = styled(Link)`
   text-decoration: none;
   color: #000;
 `
+const NavMenuInput = styled.input`
+  width: 210px;
+  height: 30px;
+  padding: 0 12px;
+  border: .5px solid #eee;
+  border-radius: 20px;
+`
 
 const NavMenu: React.FC<RouteComponentProps<any>> = ({ history }) => {
   const [searchInputValue, setSearchInputValue] = useState('')
@@ -33,7 +40,7 @@ const NavMenu: React.FC<RouteComponentProps<any>> = ({ history }) => {
       {menuLinks.length ?
         menuLinks.map((link: string, i: number) => <NavMenuLink to={`/${link}`} key={i}>{link}</NavMenuLink>) :
         <div>loading</div>}
-      <input type="text" placeholder="Поиск по названию" value={searchInputValue} onChange={handleChange}/>
+      <NavMenuInput type="text" placeholder="Поиск по названию" value={searchInputValue} onChange={handleChange}/>
     </NavMenuWrapper>
   )
 }
