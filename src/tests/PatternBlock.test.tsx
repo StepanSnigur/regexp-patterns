@@ -6,7 +6,7 @@ import PatternBlock from '../components/PatternBlock'
 describe('PatternBlock', () => {
   let PatternBlockComponent: any;
   beforeEach(() => {
-    PatternBlockComponent = render(<PatternBlock name="test" regExp="test" />)
+    PatternBlockComponent = render(<PatternBlock name="test" regExp="/test/g" />)
   })
 
   test('Test copy to clipboard', () => {

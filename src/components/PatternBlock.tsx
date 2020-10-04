@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
+import convertStringToRegExp from '../utils/convertStringToRegExp'
 
 interface IPatternBlock {
   name: string,
@@ -35,7 +36,7 @@ const PatternBlockWrapper = styled.div`
   input {
     box-sizing: border-box;
     display: block;
-    width: 85%;
+    width: 100%;
     height: 40px;
     padding: 0 20px;
     margin 20px auto 0 auto;
@@ -43,12 +44,15 @@ const PatternBlockWrapper = styled.div`
     text-align: center;
     border: 0.5px solid #eee;
     outline: none;
-    cursor: pointer;
   }
 `
 const CopyBlock = styled.div`
   position: relative;
 
+  input {
+    width: 85%;
+    cursor: pointer;
+  }
   div {
     display: none;
     width: 100%;
@@ -84,11 +88,55 @@ const CopyBlock = styled.div`
     }
   }
 `
+const TestInputWrapper = styled.div`
+  position: relative;
+  width: 85%;
+  margin: 20px auto 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  
+  input {
+    margin: 0;
+  }
+  &:before {
+    content: '';
+    width: 40px;
+    height: 100%;
+    line-height: 35px;
+    text-align: center;
+    display: none;
+    position: absolute;
+  }
+  ${(props: {isTestWordSuit: boolean, testWord: string}) => props.testWord && (props.isTestWordSuit ? `
+    &:before {
+      display: block;
+      content: '✓';
+      background: green;
+    }
+  ` : `
+    &:before {
+      display: block;
+      content: '⤫';
+      background: red;
+    }
+  `)}
+`
 
 const PatternBlock: React.FC<IPatternBlock> = ({ name, regExp }) => {
+  const [testWord, setTestWord] = useState('')
+  const [isTestWordMatching, setIsTestWordMatching] = useState(false)
+  useEffect(() => {
+    // @ts-ignore
+    const validRegExp = new RegExp(...convertStringToRegExp(regExp))
+    setIsTestWordMatching(validRegExp.test(testWord))
+  }, [regExp, testWord])
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(regExp)
       .catch(e => console.log('Error in copy: ', e))
+  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTestWord(e.target.value)
   }
 
   return (
@@ -98,7 +146,9 @@ const PatternBlock: React.FC<IPatternBlock> = ({ name, regExp }) => {
         <div>Копировать в буфер обмена</div>
         <input type="text" readOnly={true} value={regExp}/>
       </CopyBlock>
-      <input type="text" placeholder="Введите тестовое слово"/>
+      <TestInputWrapper isTestWordSuit={isTestWordMatching} testWord={testWord}>
+        <input type="text" placeholder="Введите тестовое слово" value={testWord} onChange={handleChange}/>
+      </TestInputWrapper>
     </PatternBlockWrapper>
   )
 }
