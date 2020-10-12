@@ -33,7 +33,7 @@ const LoadingNavMenuLinks = () => {
   const MOCK_NAV_MENU_LINKS_COUNT = 5 // TO-DO: make this constant depends of server data
   const mockNavMenuLinksArr = new Array(MOCK_NAV_MENU_LINKS_COUNT).fill(0)
 
-  return mockNavMenuLinksArr.map((_, i) => <MockNavLink />)
+  return mockNavMenuLinksArr.map((_, i) => <MockNavLink key={i} />)
 }
 
 export default LoadingNavMenuLinks
