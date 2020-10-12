@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { AppStateType } from '../store'
 import { withRouter, Link, RouteComponentProps } from 'react-router-dom'
 import LoadingBoundary from './LoadingBoundary'
+import LoadingNavMenuLinks from './LoadingNavMenuLinks'
 
 const NavMenuWrapper = styled.div`
   height: 62px;
@@ -38,7 +39,7 @@ const NavMenu: React.FC<RouteComponentProps<any>> = ({ history }) => {
 
   return (
     <NavMenuWrapper>
-      <LoadingBoundary isLoading={!menuLinks.length}>
+      <LoadingBoundary isLoading={!menuLinks.length} preloadingComponent={LoadingNavMenuLinks}>
         {menuLinks.map((link: string, i: number) => <NavMenuLink to={`/${link}`} key={i}>{link}</NavMenuLink>)}
       </LoadingBoundary>
       <NavMenuInput

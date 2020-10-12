@@ -18,9 +18,7 @@ const fadeIn = keyframes`
   }
 `
 const PatternBlockWrapper = styled.div`
-  width: 30%;
   margin-bottom: 3%;
-  margin-right: 4.5%;
   padding: 20px 0;
   border-radius: 7px;
   background: #fff;
